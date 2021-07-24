@@ -5,7 +5,7 @@ import java.sql.*;
 
 public class MySQLConnectionManager {
 
-    public void createNewDBConnection(){
+    public Connection createNewDBConnection(){
 
         try{
             Class.forName("com.mysql.cj.jdbc.Driver");
@@ -27,28 +27,13 @@ public class MySQLConnectionManager {
             System.out.println(jdbcURL.toString());
 
             Connection connection = DriverManager.getConnection(jdbcURL.toString());
-            if (connection != null) {
-                Statement statement = connection.createStatement();
-                if (statement != null) {
-                    ResultSet resultSet = statement.executeQuery("select * from movies");
-                    if (resultSet != null) {
-                        ResultSetMetaData meta = resultSet.getMetaData();
-                        int length = meta.getColumnCount();
-                        while(resultSet.next())
-                        {
-                            for(int i = 1; i <= length; i++){
-                                System.out.println(meta.getColumnName(i) + ": " + resultSet.getString(meta.getColumnName(i)));
-                            }
-                        }
-                        resultSet.close();
-                    }
-                    statement.close();
-                }
-                connection.close();
-            }
+
+            return connection;
         }
         catch (SQLException ex) {
             ex.printStackTrace();
         }
+
+        return null;
     }
 }

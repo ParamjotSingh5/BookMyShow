@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.sql.*;
 
 @WebServlet(
         name = "MyServlet", 
@@ -22,7 +23,31 @@ public class HelloServlet extends HttpServlet {
         System.out.println("Connecting with My Sql");
         //Test My SQL Connection
         MySQLConnectionManager mySQL = new MySQLConnectionManager();
-        mySQL.createNewDBConnection();
+        Connection conn = mySQL.createNewDBConnection();
+
+        try {
+            if (conn != null) {
+                Statement statement = conn.createStatement();
+                if (statement != null) {
+                    ResultSet resultSet = statement.executeQuery("select * from movies");
+                    if (resultSet != null) {
+                        ResultSetMetaData meta = resultSet.getMetaData();
+                        int length = meta.getColumnCount();
+                        while (resultSet.next()) {
+                            for (int i = 1; i <= length; i++) {
+                                System.out.println(meta.getColumnName(i) + ": " + resultSet.getString(meta.getColumnName(i)));
+                            }
+                        }
+                        resultSet.close();
+                    }
+                    statement.close();
+                }
+                conn.close();
+            }
+        }
+        catch (SQLException ex){
+            ex.printStackTrace();
+        }
 
         ServletOutputStream out = resp.getOutputStream();
         out.write("hello world ".getBytes());
