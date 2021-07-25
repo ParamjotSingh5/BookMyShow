@@ -35,3 +35,11 @@
     font-weight: 600;
     border-radius:5px;
 }
+
+.displayNone{
+  display: none;
+}
+
+.displayBlock{
+  display: block;
+}

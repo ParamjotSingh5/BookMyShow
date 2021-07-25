@@ -18,6 +18,67 @@ import java.util.Date;
 
 public class CommonHelper {
 
+    public LinkedList<Theater> getALlTheatersFromDB(){
+        MySQLConnectionManager mySQL = new MySQLConnectionManager();
+        Connection conn = mySQL.createNewDBConnection();
+
+        String sqlQuery = "SELECT * FROM theatre";
+
+        LinkedList<Theater> theaters = new LinkedList<>();
+
+        Statement statement = null;
+        ResultSet resultSet = null;
+
+        try {
+            if (conn != null) {
+                statement = conn.createStatement();
+                if (statement != null) {
+                    resultSet = statement.executeQuery(sqlQuery);
+                    if (resultSet != null) {
+                        ResultSetMetaData meta = resultSet.getMetaData();
+                        int length = meta.getColumnCount();
+                        while (resultSet.next()) {
+
+                            Theater addTheater  = new Theater();
+
+                            addTheater.setId(resultSet.getInt("idTheatre"));
+                            addTheater.setName(resultSet.getString ("Name"));
+                            addTheater.setSlots(resultSet.getInt("Slots"));
+                            addTheater.setLocation(resultSet.getString("Location"));
+
+                            theaters.add(addTheater);
+                        }
+                    }
+                }
+            }
+        }
+        catch (SQLException ex){
+            ex.printStackTrace();
+        }
+        finally {
+            try {
+                resultSet.close();
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+
+            try {
+                statement.close();
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+
+            try {
+                conn.close();
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+
+        }
+
+        return theaters;
+    }
+
     public int insertBookOrder(int movieId, Date ReservationDate, int slotsCount){
 
         int response = 0;

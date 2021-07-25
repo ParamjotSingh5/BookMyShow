@@ -77,19 +77,19 @@ function createMovieTemplate(movie, theater){
     movieImgDiv.appendChild(movieImg)
 
     var movieName = document.getElementById("movieName");
-    movieName.innerHTML = `Movie Name: ${movie.Name}`;
+    movieName.innerHTML = `Movie Name: <em>${movie.Name} </em>`;
 
     var movieGenre = document.getElementById("movieGenre");
-    movieGenre.innerHTML = `Genre: ${movie.Genre}`;
+    movieGenre.innerHTML = `Genre: <em>${movie.Genre}</em>`;
 
     var movieScreeningStartEndDate = document.getElementById("movieScreeningStartEndDate");
-    movieScreeningStartEndDate.innerHTML = `Movie Screening starts from ${movie.ScreeningStartDate} up to ${movie.ScreeningEndDate}`
+    movieScreeningStartEndDate.innerHTML = `Movie Screening starts from <em>${movie.ScreeningStartDate}</em> up to <em>${movie.ScreeningEndDate} </em>`
 
     var theaterName = document.getElementById("theaterName");
-    theaterName.innerHTML = `Theater Name: ${theater.Name}`;
+    theaterName.innerHTML = `Theater Name: <em>${theater.Name}</em>`;
 
     var theaterLocation = document.getElementById("theaterLocation");
-    theaterLocation.innerHTML = `Theater Location: ${theater.Location}`;
+    theaterLocation.innerHTML = `Theater Location: <em>${theater.Location}</em>`;
 
     //create Reservation Date selector
     let screeningStartDate = new Date(movie.ScreeningStartDate);
@@ -153,7 +153,7 @@ function reservationSelectChanged(arg){
     }  
 
     var AvailableSlotsDIv = document.getElementById("AvailableSlotsDIv");
-    AvailableSlotsDIv.innerHTML = `Total Slots: ${availableSlotsData.AvialbaleSlots}  Available Slots: ${availableSlotsCount}`;
+    AvailableSlotsDIv.innerHTML = `Total Slots: <em>${availableSlotsData.AvialbaleSlots}</em>  Available Slots: <em>${availableSlotsCount}</em>`;
 }
 
 function createSlotCountSelector(slotsCountToShow){
@@ -218,7 +218,7 @@ function bookThisMovies(){
         success: function(data) {
             console.log(data);            
             if(data > 0){
-                document.getElementById("movieBooked").removeAttribute("style");
+                document.getElementById("movieBooked").style.display = "block";
             }
         }
      });
