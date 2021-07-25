@@ -119,7 +119,7 @@ function createMovieTemplate(movie){
     movieContainer.appendChild(movieStartDateContainer);
 
     var movieStartDate = document.createElement("P");    
-    movieStartDate.innerHTML = "Shows Starts On " + movie.ScreeningStartDate;
+    movieStartDate.innerHTML = `Shows Starts On ${movie.ScreeningStartDate}`;
     movieStartDateContainer.appendChild(movieStartDate);
 
     var movieEndDateContainer = document.createElement("DIV");
@@ -128,7 +128,7 @@ function createMovieTemplate(movie){
     movieContainer.appendChild(movieEndDateContainer);
 
     var movieEndDate = document.createElement("P");    
-    movieEndDate.innerHTML = "Up to "+ movie.ScreeningEndDate;
+    movieEndDate.innerHTML = `Up to ${movie.ScreeningEndDate}`;
     movieEndDateContainer.appendChild(movieEndDate);
 
     var movieShowTimeContainer = document.createElement("DIV");
@@ -137,8 +137,16 @@ function createMovieTemplate(movie){
     movieContainer.appendChild(movieShowTimeContainer);
 
     var movieShowTime = document.createElement("P");    
-    movieShowTime.innerHTML = "Show Timing: " + movie.Showtime.Shift;
+    movieShowTime.innerHTML = `Show Timing: ${movie.Showtime.Shift}`;
     movieShowTimeContainer.appendChild(movieShowTime);
+
+    var bookMovieAnchor = document.createElement("A");    
+    bookMovieAnchor.classList.add("btn");
+    bookMovieAnchor.classList.add("btn-primary");
+    bookMovieAnchor.setAttribute("type", "button");
+    bookMovieAnchor.setAttribute("href", `/book-movie.html?Id=${movie.Id}`); 
+    bookMovieAnchor.innerHTML = "Book"
+    movieContainer.appendChild(bookMovieAnchor);
 
    return movieContainer;
 }

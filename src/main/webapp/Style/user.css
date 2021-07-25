@@ -28,3 +28,10 @@
     font-weight: 600;
     border-radius:5px;
   }
+
+.orderHistoryEachRow{
+    background-color:#7CA5B8;
+    color: white;
+    font-weight: 600;
+    border-radius:5px;
+}
