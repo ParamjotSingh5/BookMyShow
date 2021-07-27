@@ -147,7 +147,7 @@ function updateTheater(theaterId){
         success: function(data) {
             console.log(data); 
             if(data){
-                $('.toast').toast('show');
+                $('.opreationSuccessToast').toast('show');
             }
         }
      });
