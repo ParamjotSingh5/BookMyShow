@@ -46,6 +46,7 @@ function AddTheaters(){
         var theaterNameContainer = document.createElement("DIV");
         theaterNameContainer.classList.add("col");
         theaterNameContainer.classList.add("theaterNameContainer");
+        theaterNameContainer.setAttribute("title", "Theater Name");
         theaterHead.appendChild(theaterNameContainer);
 
         var theaterName = document.createElement("H2");
@@ -55,6 +56,7 @@ function AddTheaters(){
         var TotalSlots = document.createElement("DIV");
         TotalSlots.classList.add("col");
         TotalSlots.classList.add("TotalSlots");
+        TotalSlots.setAttribute("title", "Total slots");
         theaterHead.appendChild(TotalSlots);
 
         var SlotsIcon = document.createElement("I");
@@ -67,6 +69,7 @@ function AddTheaters(){
         var theaterLocation = document.createElement("DIV");
         theaterLocation.classList.add("col");
         theaterLocation.classList.add("theaterLocation");
+        theaterLocation.setAttribute("title", "Theater Location");
         theaterHead.appendChild(theaterLocation);
 
         var locationIcon = document.createElement("I");
