@@ -1,13 +1,13 @@
 let movieDetails = null;
-let availableSlotsData= null;
+let availableSlotsData = null;
 Init();
 
-function Init(){
+function Init() {
     getMoviesDetails();
     AddElements();
 }
 
-function getMoviesDetails(){
+function getMoviesDetails() {
 
     var url_string = window.location.href;
     var url = new URL(url_string);
@@ -17,61 +17,61 @@ function getMoviesDetails(){
         type: 'GET',
         url: '/getMovieDetails',
         data: { 'movieId': movieId },
-        async:false,
+        async: false,
         contentType: "application/json; charset=utf-8",
         dataType: "json",
-        success: function(data) {
+        success: function (data) {
             console.log(data);
             movieDetails = data;
         }
-     });
+    });
 }
 
-function AddElements(){   
+function AddElements() {
 
     createMovieTemplate(movieDetails.movie, movieDetails.theater);
     addOrderHistory(movieDetails.orderHistory);
 }
 
-function addOrderHistory(orderHistoryArray){
+function addOrderHistory(orderHistoryArray) {
     var orderHistoryContainer = document.getElementById("orderHistroyTBody");
-    
-    for(var each in orderHistoryArray){
+
+    for (var each in orderHistoryArray) {
         orderHistoryContainer.appendChild(createEachOrderHistory(orderHistoryArray[each]));
     }
 
 }
 
-function createEachOrderHistory(arg){
+function createEachOrderHistory(arg) {
 
     var orderHistoryEachRow = document.createElement("TR");
-    orderHistoryEachRow.setAttribute("scope","col");
+    orderHistoryEachRow.setAttribute("scope", "col");
 
-    var movieName = document.createElement("TD");    
+    var movieName = document.createElement("TD");
     movieName.innerHTML = arg.MovieName;
     orderHistoryEachRow.appendChild(movieName);
 
-    var slots = document.createElement("TD");    
-    slots.innerHTML = arg.SlotsBooked ;
+    var slots = document.createElement("TD");
+    slots.innerHTML = arg.SlotsBooked;
     orderHistoryEachRow.appendChild(slots);
 
-    var reservationDate = document.createElement("TD");    
+    var reservationDate = document.createElement("TD");
     reservationDate.innerHTML = arg.ReservationDate;
     orderHistoryEachRow.appendChild(reservationDate);
 
-    var theatreName = document.createElement("TD");    
+    var theatreName = document.createElement("TD");
     theatreName.innerHTML = arg.TheaterName;
     orderHistoryEachRow.appendChild(theatreName);
 
     return orderHistoryEachRow;
 }
 
-function createMovieTemplate(movie, theater){
-    
+function createMovieTemplate(movie, theater) {
+
     var movieImgDiv = document.getElementById("movieImg");
-    
+
     var movieImg = document.createElement("IMG");
-    movieImg.setAttribute("src", "/images/generic_Movie.jpg");    
+    movieImg.setAttribute("src", `../moviesThumbs/${movie.Id}.jpg`);
     movieImg.setAttribute("width", "200");
     movieImg.setAttribute("alt", "suppp");
     movieImgDiv.appendChild(movieImg)
@@ -97,16 +97,16 @@ function createMovieTemplate(movie, theater){
 
     var DateSpans = dateRange(screeningStartDate, screeningEndDate);
 
-    createReservationDateSelector(DateSpans);   
+    createReservationDateSelector(DateSpans);
 
     var firstELem = document.getElementById("reservationDateSelector").firstChild;
     reservationSelectChanged(firstELem);
 }
 
-function createReservationDateSelector(dateSpanArray){
+function createReservationDateSelector(dateSpanArray) {
     var selector = document.getElementById("reservationDateSelector");
 
-    for(let singleDay in dateSpanArray){
+    for (let singleDay in dateSpanArray) {
         var z = document.createElement("option");
         z.setAttribute("value", dateSpanArray[singleDay].toDateString());
         var t = document.createTextNode(dateSpanArray[singleDay].toDateString());
@@ -121,47 +121,47 @@ function dateRange(startDate, endDate, steps = 1) {
 
     var todayDate = new Date();
 
-    if(startDate < todayDate){
+    if (startDate < todayDate) {
         startDate = todayDate;
     }
 
     const diffTime = Math.abs(endDate - startDate);
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
     let currentDate = new Date(startDate);
 
-    for(var i=0; i < diffDays+1; i++){
+    for (var i = 0; i < diffDays + 1; i++) {
         dateArray.push(new Date(currentDate));
         // Use UTC date to prevent problems with time zones and DST
         currentDate.setUTCDate(currentDate.getUTCDate() + steps);
-    }   
-  
+    }
+
     return dateArray;
 }
 
-function reservationSelectChanged(arg){
-    var selectedDate = (arg.value || arg.options[arg.selectedIndex].value);  
+function reservationSelectChanged(arg) {
+    var selectedDate = (arg.value || arg.options[arg.selectedIndex].value);
     getAvailableSlotsOnSelectedDate(selectedDate);
-    
+
     var availableSlotsCount = availableSlotsData.AvialbaleSlots - availableSlotsData.SlotsBooked;
 
-    if(availableSlotsCount < 9){
+    if (availableSlotsCount < 9) {
         createSlotCountSelector(availableSlotsCount);
     }
-    else{
-        createSlotCountSelector(9);    
-    }  
+    else {
+        createSlotCountSelector(9);
+    }
 
     var AvailableSlotsDIv = document.getElementById("AvailableSlotsDIv");
     AvailableSlotsDIv.innerHTML = `Total Slots: <em>${availableSlotsData.AvialbaleSlots}</em>  Available Slots: <em>${availableSlotsCount}</em>`;
 }
 
-function createSlotCountSelector(slotsCountToShow){
+function createSlotCountSelector(slotsCountToShow) {
     var selector = document.getElementById("slotsCountSelector");
 
     selector.innerHTML = '';
 
-    for(var i=0; i<= slotsCountToShow; i++){
+    for (var i = 0; i <= slotsCountToShow; i++) {
         var z = document.createElement("option");
         z.setAttribute("value", i);
         var t = document.createTextNode(i);
@@ -171,36 +171,36 @@ function createSlotCountSelector(slotsCountToShow){
     }
 }
 
-function getAvailableSlotsOnSelectedDate(selectedDate){
-    
+function getAvailableSlotsOnSelectedDate(selectedDate) {
+
     $.ajax({
         type: 'GET',
         url: '/getAvailableSlotsByDate',
         data: { 'selectedDate': selectedDate, 'movieId': movieDetails.movie.Id },
-        async:false,
+        async: false,
         contentType: "application/json; charset=utf-8",
         dataType: "json",
-        success: function(data) {
-            console.log( data);
+        success: function (data) {
+            console.log(data);
             availableSlotsData = data;
         }
-     });
+    });
 }
 
-function slotsCountSelectChanged(arg){
-    var slotsCount = (arg.value || arg.options[arg.selectedIndex].value); 
+function slotsCountSelectChanged(arg) {
+    var slotsCount = (arg.value || arg.options[arg.selectedIndex].value);
 
-    if(slotsCount > 0){
+    if (slotsCount > 0) {
         var btn = document.getElementById("bookNowbtn");
         btn.classList.remove("disabled");
     }
-    else{
+    else {
         var btn = document.getElementById("bookNowbtn");
         btn.classList.add("disabled");
     }
 }
 
-function bookThisMovies(){
+function bookThisMovies() {
 
     var dateSelectedEle = document.getElementById("reservationDateSelector");
     var dateSelected = dateSelectedEle.options[dateSelectedEle.selectedIndex].text;
@@ -212,15 +212,15 @@ function bookThisMovies(){
         type: 'GET',
         url: '/bookMovie',
         data: { 'movieId': movieDetails.movie.Id, 'dateSelected': dateSelected, 'slotsCount': slotsCount },
-        async:false,
+        async: false,
         contentType: "application/json; charset=utf-8",
         dataType: "json",
-        success: function(data) {
-            console.log(data);            
-            if(data > 0){
+        success: function (data) {
+            console.log(data);
+            if (data > 0) {
                 document.getElementById("movieBooked").style.display = "block";
             }
         }
-     });
+    });
 
 }

@@ -1,13 +1,13 @@
 let screeningMoviesJSON;
 
-function getScreeningMovies(){
+function getScreeningMovies() {
     $.ajax({
         type: 'GET',
         url: '/getScreeningMovies',
-        async:false,
+        async: false,
         contentType: "application/json; charset=utf-8",
         dataType: "json",
-        success: function(data) {
+        success: function (data) {
             console.log(data);
             screeningMoviesJSON = data;
         }
@@ -17,24 +17,24 @@ function getScreeningMovies(){
 
 Init();
 
-function Init(){
+function Init() {
     getScreeningMovies();
     AddTheaters();
 }
 
-function AddTheaters(){
+function AddTheaters() {
 
-    var mainContentDiv = document.getElementById("mainContent");  
+    var mainContentDiv = document.getElementById("mainContent");
 
     //iterate over theaters
-    for(var prop in screeningMoviesJSON){
+    for (var prop in screeningMoviesJSON) {
         var currentTheater = screeningMoviesJSON[prop];
 
         var theaterContainer = document.createElement("DIV");
         theaterContainer.classList.add("container");
         theaterContainer.classList.add("m-4");
         theaterContainer.classList.add("theaterContainer");
-        theaterContainer.setAttribute("id", "theater"+currentTheater.Id);
+        theaterContainer.setAttribute("id", "theater" + currentTheater.Id);
 
         var theaterHead = document.createElement("DIV");
         theaterHead.classList.add("row");
@@ -63,8 +63,8 @@ function AddTheaters(){
         SlotsIcon.classList.add("fas");
         SlotsIcon.classList.add("fa-chair");
         TotalSlots.appendChild(SlotsIcon);
-        
-        TotalSlots.appendChild(document.createTextNode(" "+currentTheater.Slots));        
+
+        TotalSlots.appendChild(document.createTextNode(" " + currentTheater.Slots));
 
         var theaterLocation = document.createElement("DIV");
         theaterLocation.classList.add("col");
@@ -76,7 +76,7 @@ function AddTheaters(){
         locationIcon.classList.add("fas");
         locationIcon.classList.add("fa-map-marker-alt");
         theaterLocation.appendChild(locationIcon);
-        
+
         theaterLocation.appendChild(document.createTextNode(" " + currentTheater.Location));
 
         var theaterBody = document.createElement("DIV");
@@ -89,30 +89,33 @@ function AddTheaters(){
         console.log("movies:" + currentTheater.movies);
         //itearte over movies add inot theaterBody
 
-        for(var movieprop in currentTheater.movies){
-           var currentMovie = currentTheater.movies[movieprop];
-           
-           theaterBody.appendChild(createMovieTemplate(currentMovie));
+        for (var movieprop in currentTheater.movies) {
+            var currentMovie = currentTheater.movies[movieprop];
+
+            theaterBody.appendChild(createMovieTemplate(currentMovie));
         }
 
         mainContentDiv.appendChild(theaterContainer);
     }
 }
 
-function createMovieTemplate(movie){
+function createMovieTemplate(movie) {
 
     var movieContainer = document.createElement("DIV");
     movieContainer.classList.add("col-2");
     movieContainer.classList.add("p-3");
     movieContainer.classList.add("m-2");
     movieContainer.classList.add("moviesConatiner");
-    
+    movieContainer.style.background = `url("../moviesThumbs/${movie.Id}.jpg")`;
+    movieContainer.style.backgroundRepeat = "no-repeat";
+    movieContainer.style.backgroundSize = "cover";
+
     var movieNameContainer = document.createElement("DIV");
     movieNameContainer.classList.add("row");
     movieNameContainer.classList.add("movieName");
     movieContainer.appendChild(movieNameContainer);
 
-    var movieName = document.createElement("H2");    
+    var movieName = document.createElement("H2");
     movieName.innerHTML = movie.Name;
     movieNameContainer.appendChild(movieName);
 
@@ -121,7 +124,7 @@ function createMovieTemplate(movie){
     movieStartDateContainer.classList.add("movieStartDateContainer");
     movieContainer.appendChild(movieStartDateContainer);
 
-    var movieStartDate = document.createElement("P");    
+    var movieStartDate = document.createElement("P");
     movieStartDate.innerHTML = `Shows Starts On ${movie.ScreeningStartDate}`;
     movieStartDateContainer.appendChild(movieStartDate);
 
@@ -130,7 +133,7 @@ function createMovieTemplate(movie){
     movieEndDateContainer.classList.add("movieEndDateContainer");
     movieContainer.appendChild(movieEndDateContainer);
 
-    var movieEndDate = document.createElement("P");    
+    var movieEndDate = document.createElement("P");
     movieEndDate.innerHTML = `Up to ${movie.ScreeningEndDate}`;
     movieEndDateContainer.appendChild(movieEndDate);
 
@@ -139,19 +142,19 @@ function createMovieTemplate(movie){
     movieShowTimeContainer.classList.add("movieShowTimeContainer");
     movieContainer.appendChild(movieShowTimeContainer);
 
-    var movieShowTime = document.createElement("P");    
+    var movieShowTime = document.createElement("P");
     movieShowTime.innerHTML = `Show Timing: ${movie.Showtime.Shift}`;
     movieShowTimeContainer.appendChild(movieShowTime);
 
-    var bookMovieAnchor = document.createElement("A");    
+    var bookMovieAnchor = document.createElement("A");
     bookMovieAnchor.classList.add("btn");
     bookMovieAnchor.classList.add("btn-primary");
     bookMovieAnchor.setAttribute("type", "button");
-    bookMovieAnchor.setAttribute("href", `/book-movie.html?Id=${movie.Id}`); 
+    bookMovieAnchor.setAttribute("href", `/book-movie.html?Id=${movie.Id}`);
     bookMovieAnchor.innerHTML = "Book"
     movieContainer.appendChild(bookMovieAnchor);
 
-   return movieContainer;
+    return movieContainer;
 }
 
 
